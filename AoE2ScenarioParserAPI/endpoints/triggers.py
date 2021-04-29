@@ -3,16 +3,15 @@ from flask_restful import Resource
 
 from AoE2ScenarioParserAPI import glob
 from AoE2ScenarioParserAPI.other.helper import get_trigger
+from AoE2ScenarioParser.objects.data_objects.trigger import Trigger as TriggerObject
+
+from AoE2ScenarioParserAPI.other.json_converter import trigger_to_dict
 
 
 class Triggers(Resource):
     def get(self):
-        return {
-                   'triggers': [{
-                       'name': trigger.name,
-                       'id': trigger.trigger_id
-                   } for trigger in glob.scenario.trigger_manager.triggers]
-               }, 200
+        trigger: TriggerObject
+        return {'triggers': [trigger_to_dict(trigger) for trigger in glob.scenario.trigger_manager.triggers]}, 200
 
     def post(self):
         glob.scenario.trigger_manager.add_trigger(**request.form)
@@ -22,7 +21,7 @@ class Triggers(Resource):
 class Trigger(Resource):
     def get(self, tid):
         try:
-            return {'name': get_trigger(tid).name}, 200
+            return trigger_to_dict(get_trigger(tid)), 200
         except IndexError:
             return {}, 404
 
