@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 from AoE2ScenarioParserAPI import glob
-from AoE2ScenarioParserAPI.endpoints.helper import get_trigger
+from AoE2ScenarioParserAPI.other.helper import get_trigger
 
 
 class Triggers(Resource):
