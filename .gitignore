@@ -502,3 +502,6 @@ Thumbs.db
 
 
 # End of https://www.toptal.com/developers/gitignore/api/node,pycharm,phpstorm,python
+.idea/AoE2ScenarioParserAPI.iml
+
+.idea/misc.xml
