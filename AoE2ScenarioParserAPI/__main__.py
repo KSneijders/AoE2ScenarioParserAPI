@@ -1,6 +1,7 @@
 import time
 from argparse import ArgumentParser
 
+from AoE2ScenarioParser import settings
 from AoE2ScenarioParser.datasets.players import PlayerId
 from AoE2ScenarioParser.datasets.trigger_lists import ColorMood
 from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
@@ -12,13 +13,17 @@ from flask_restful import Api
 from AoE2ScenarioParserAPI import glob
 from AoE2ScenarioParserAPI.other.json_converter import trigger_to_dict
 
+settings.PRINT_STATUS_UPDATES = False
+
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="filename", help="The aoe2scenario file to read", metavar="FILE")
 args = parser.parse_args()
 
-filename = "C:/Users/Kerwin Sneijders/Games/Age of Empires 2 " \
-           "DE/76561198140740017/resources/_common/scenario/test1212.aoe2scenario "
 
+filename = ""
+if __name__ == '__main__':
+    filename = "C:/Users/Kerwin Sneijders/Games/Age of Empires 2 " \
+               "DE/76561198140740017/resources/_common/scenario/test1212.aoe2scenario "
 filename = args.filename or filename
 
 glob.scenario = AoE2DEScenario.from_file(filename)
@@ -27,10 +32,6 @@ glob.scenario.trigger_manager.add_trigger("NEW TIRGGER").new_effect.display_inst
 )
 glob.scenario.trigger_manager.add_trigger("TEST").new_effect.change_color_mood(color_mood=ColorMood.AUTUMN)
 glob.scenario.trigger_manager.triggers[-1].new_condition.objects_in_area(quantity=4, source_player=PlayerId.ONE)
-print(glob.scenario.trigger_manager.get_content_as_string())
-
-print("\nStarting API...")
-time.sleep(.5)
 
 app = Flask(__name__)
 api = Api(app)
