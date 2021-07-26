@@ -1,2 +1,2 @@
 Flask~=1.1.2
-AoE2ScenarioParser~=0.1.7
+AoE2ScenarioParser
