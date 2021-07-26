@@ -1,6 +1,8 @@
 import time
 from argparse import ArgumentParser
 
+from AoE2ScenarioParser.datasets.players import PlayerId
+from AoE2ScenarioParser.datasets.trigger_lists import ColorMood
 from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
 from AoE2ScenarioParser.datasets.effects import attributes as effect_attributes, effect_names
 from AoE2ScenarioParser.datasets.conditions import attributes as condition_attributes, condition_names
@@ -14,20 +16,18 @@ parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="filename", help="The aoe2scenario file to read", metavar="FILE")
 args = parser.parse_args()
 
-# filename = args.filename
 filename = "C:/Users/Kerwin Sneijders/Games/Age of Empires 2 " \
-           "DE/76561198140740017/resources/_common/scenario/Perk_Pandemonium_8P.aoe2scenario "
+           "DE/76561198140740017/resources/_common/scenario/test1212.aoe2scenario "
+
+filename = args.filename or filename
+
 glob.scenario = AoE2DEScenario.from_file(filename)
 glob.scenario.trigger_manager.add_trigger("NEW TIRGGER").new_effect.display_instructions(
-    object_list_unit_id=4,
-    source_player=1,
-    string_id=-1,
-    display_time=True,
-    instruction_panel_position=2,
-    play_sound=True,
     message="Awesome messgaeeee :)",
-    sound_name="SOUIND DM ANEM!"
 )
+glob.scenario.trigger_manager.add_trigger("TEST").new_effect.change_color_mood(color_mood=ColorMood.AUTUMN)
+glob.scenario.trigger_manager.triggers[-1].new_condition.objects_in_area(quantity=4, source_player=PlayerId.ONE)
+print(glob.scenario.trigger_manager.get_content_as_string())
 
 print("\nStarting API...")
 time.sleep(.5)
@@ -36,6 +36,7 @@ app = Flask(__name__)
 api = Api(app)
 
 
+# Todo rename endpoint
 @app.route('/file')
 def get_file():
     triggers = [trigger_to_dict(trigger) for trigger in glob.scenario.trigger_manager.triggers]
@@ -49,6 +50,7 @@ def get_file():
            }, 200
 
 
+# Todo: Combine these to general info
 @app.route('/effect/attributes')
 def get_effect_attributes():
     return effect_attributes
@@ -69,6 +71,7 @@ def get_condition_names():
     return dict(condition_names)
 
 
+# Todo rename endpoint
 @app.route('/login', methods=['POST'])
 def write_file():
     print(request.data)
