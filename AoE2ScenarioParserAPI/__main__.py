@@ -13,16 +13,17 @@ from flask_restful import Api
 from AoE2ScenarioParserAPI import glob
 from AoE2ScenarioParserAPI.other.json_converter import trigger_to_dict
 
-settings.PRINT_STATUS_UPDATES = False
-
 parser = ArgumentParser()
-parser.add_argument("-f", "--file", required=True, dest="filename", help="An aoe2scenario file", metavar="String")
+parser.add_argument("-f", "--file", type=str, required=True, dest="filename", help="An aoe2scenario file", metavar="String")
+parser.add_argument("-l", "--log-status", dest="log_status_updates", action='store_true')
 args = parser.parse_args()
 
 # Setup filename, strip whitespaces and remove quotes (Cause they can't be in a filepath anyway)
 filename: str = args.filename
 filename = filename.strip()
 filename = filename.replace('\'', '').replace('\"', '')
+
+settings.PRINT_STATUS_UPDATES = args.log_status_updates
 
 glob.scenario = AoE2DEScenario.from_file(filename)
 
