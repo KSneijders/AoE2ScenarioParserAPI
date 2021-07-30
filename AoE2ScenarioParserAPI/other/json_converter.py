@@ -1,3 +1,4 @@
+from AoE2ScenarioParser.helper.exceptions import UnsupportedAttributeError
 from AoE2ScenarioParser.objects.data_objects.condition import Condition
 from AoE2ScenarioParser.objects.data_objects.effect import Effect
 from AoE2ScenarioParser.objects.data_objects.trigger import Trigger
@@ -5,11 +6,14 @@ from AoE2ScenarioParser.objects.data_objects.trigger import Trigger
 
 def transform(obj, keys, mode="normal"):
     def set_entry(attr_from, attr_to):
-        if mode == "normal":
-            result[attr_to] = getattr(obj, attr_from)
-        elif mode == "bool":
-            result[attr_to] = getattr(obj, attr_from) == 1
-
+        try:
+            if mode == "normal":
+                result[attr_to] = getattr(obj, attr_from)
+            elif mode == "bool":
+                result[attr_to] = getattr(obj, attr_from) == 1
+        except UnsupportedAttributeError:
+            return
+    
     result = {}
     if type(keys) is list:
         for attr in keys:
