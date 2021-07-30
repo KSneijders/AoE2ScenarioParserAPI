@@ -16,22 +16,15 @@ from AoE2ScenarioParserAPI.other.json_converter import trigger_to_dict
 settings.PRINT_STATUS_UPDATES = False
 
 parser = ArgumentParser()
-parser.add_argument("-f", "--file", dest="filename", help="The aoe2scenario file to read", metavar="FILE")
+parser.add_argument("-f", "--file", required=True, dest="filename", help="An aoe2scenario file", metavar="String")
 args = parser.parse_args()
 
-
-filename = ""
-if __name__ == '__main__':
-    filename = "C:/Users/Kerwin Sneijders/Games/Age of Empires 2 " \
-               "DE/76561198140740017/resources/_common/scenario/test1212.aoe2scenario "
-filename = args.filename or filename
+# Setup filename, strip whitespaces and remove quotes (Cause they can't be in a filepath anyway)
+filename: str = args.filename
+filename = filename.strip()
+filename = filename.replace('\'', '').replace('\"', '')
 
 glob.scenario = AoE2DEScenario.from_file(filename)
-glob.scenario.trigger_manager.add_trigger("NEW TIRGGER").new_effect.display_instructions(
-    message="Awesome messgaeeee :)",
-)
-glob.scenario.trigger_manager.add_trigger("TEST").new_effect.change_color_mood(color_mood=ColorMood.AUTUMN)
-glob.scenario.trigger_manager.triggers[-1].new_condition.objects_in_area(quantity=4, source_player=PlayerId.ONE)
 
 app = Flask(__name__)
 api = Api(app)

@@ -1,6 +1,17 @@
 # AoE2ScenarioParserAPI
 
-This project is a wrapper for `AoE2ScenarioParser`. 
+This project is a helper project for [AoE2ScenarioParserGUI]. 
 
-The file `main.py` takes a command line argument (`-f` or `--file`) with a relative or absolute path to an `aoe2scenario` file. 
-It'll read it using the `AoE2ScenarioParser` and start a Flask API.
+This module reads an `aoe2scenario` file and sets up a Flask API which can be used to query information about the scenario.
+
+
+## How it works
+
+When calling this module from the command line, it requires an argument: (`-f` or `--file`).
+This can be a relative or absolute path to any given `aoe2scenario` file.
+
+The project [AoE2ScenarioParserGUI] uses this project internally. So downloading this is not necessary.
+
+[---- LINKS ----]: ()
+
+[AoE2ScenarioParserGUI]: (https://github.com/KSneijders/AoE2ScenarioParserGUI)
